@@ -130,20 +130,43 @@ plot(ctg$net_amt, type ='p',pch=21, bg='magenta')
 
 #È÷½ºÅä±×·¥°ú È®·ü ¹Ğµµ °î¼±
 par(mfrow=c(2,2))
-hist(ctg$tot_amt,main='hist(), Frequency ?˜µ?…˜')
-hist(ctg$tot_amt, probability=TRUE, main='hist(), Porbability ?˜µ?…˜')
-plot(density(ctg$tot_amt),main='density() ?™•ë¥ ë?€?„ ?˜µ?…˜')
-hist(ctg$tot_amt,probability=TRUE, main = 'hist() ?ˆ?Š¤?† ê·¸ë¨ê³? density() ?™•ë¥ ë?€?„ ?•¨?ˆ˜ ?†µ?•©')
+hist(ctg$tot_amt,main='hist(), Frequency ¿É¼Ç')
+hist(ctg$tot_amt, probability=TRUE, main='hist(), Porbability ¿É¼Ç')
+plot(density(ctg$tot_amt),main='density() È®·ü¹Ğµµ ¿É¼Ç')
+hist(ctg$tot_amt,probability=TRUE, main = 'hist() È÷½ºÅä±×·¥°ú density() È®·ü¹Ğµµ ÇÔ¼ö ÅëÇÕ')
 lines(density(ctg$tot_amt))
 
 #¹Ú½ºÇÃ·Ô
 par(mfrow=c(1,1))
-boxplot(ctg$tot_amt,main='ë°•ìŠ¤?”Œë¡?', ylab ='ì§€ì¶œê²½ë¹?')
+boxplot(ctg$tot_amt,main='¹Ú½ºÇÃ·Ô', ylab ='ÁöÃâ°æºñ')
 
 
+#ºñÀ²Ã´µµ º¯¼ö°£ Æ¯¼º ºĞ¼®
 
+# amt º¯¼ö ±âº» Æ¯¼º ÆÄ¾Ç
+str(ctg$tot_amt)
+str(ctg$dis_amt)
+str(ctg$net_amt)
 
+#»ó°ü¼º ºĞ¼®
+cor(ctg$tot_amt, ctg$net_amt, method = 'spearman')
+cor(ctg$tot_amt, ctg$net_amt, method = 'pearson')
 
+###ºñÀ²Ã´µµ º¯¼ö°£ ½Ã°¢È­
+
+#±âº» graphics::plot() ÇÔ¼öÀÌ¿ë:Á÷¼±°ú °î¼± ÃÖÀû¼± Ãß°¡(¾Æ¸¶ µğ¸à¼Ç Ãß°¡ ÇÊ¿ä )
+par(mfrow=c(1,1))
+plot(tot_amt~net_amt, data = ctg, pch=19,
+     main = 'ÃÑ¸ÅÃâ°ú ½Ç¸ÅÃâ °ü·Ã¼º',
+     xlab = '½Ç¸ÅÃâ',
+     ylab = 'ÃÑ¸ÅÃâ')
+
+#ÃÖÀûÀÇ Ãß¼¼Á÷¼±(optimum trendline)Ãß°¡
+abline(lm(tot_amt~net_amt, data = ctg),col = 'blue', lwd = 2, lty =2)
+
+##ÃÖÀûÀÇ Ãß¼¼°î¼±(optimum curve)Ãß°¡
+lines(lowess(ctg$tot_amt ~ ctg$net_amt),
+      col=blue, lwd=2 ,lty=2)
 
 
 
