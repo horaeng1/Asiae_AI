@@ -22,20 +22,30 @@ unique(data$brd_nm)
 unique(data$goodcd)
 #997+9427
 unique(data$corner_nm)
-#¤¤
+#309
 unique(data$pc_nm)
 #77
 unique(data$team_nm)
 #4
 
-###ë¹„ìœ¨?˜• ì²™ë„ ë³€?ˆ˜ì»¬ëŸ¼ ?š”?•½ì§‘ê³„
+###ºñÀ²Çü Ã´µµ º¯¼öÄÃ·³ Æ¯¼ºÆÄ¾Ç
 
-#?‚°?ˆ ?‰ê·?
+#¸ÅÃâ ±â¼ú Åë°è·®
+summary(data$tot_amt)
+summary(data$dis_amt)
+summary(data$net_amt)
+
+library(Hmisc)
+Hmisc::describe(data$tot_amt)
+Hmisc::describe(data$dis_amt)
+Hmisc::describe(data$net_amt)
+
+#»ê¼úÆò±Õ
 mean(data$tot_amt)
 mean(data$dis_amt)
 mean(data$net_amt)
 
-#ì¤‘ê°„ê°?
+#Áß¾Ó°ª
 median(data$tot_amt)
 median(data$dis_amt)
 median(data$net_amt)
@@ -46,7 +56,7 @@ ctg<-data[ctg_names]
 ctg
 
 
-#ìµœë¹ˆê°?
+#ÃÖºó°ª
 tot_amt_freq <-table(ctg$tot_amt)
 tot_amt_freq
 sort(tot_amt_freq, decreasing = TRUE)
@@ -68,24 +78,24 @@ names(which.max(net_amt_freq))#20000
 
 
 
-###ë¹„ìœ¨?˜•ì²™ë„ ë³€?ˆ˜ì»¬ëŸ¼ ?š”?•½ì§‘ê³„
+###ºñÀ²Çü Ã´µµ º¯¼öÄÃ·³ ¿ä¾àÁı°è
 
-#ë¶„ì‚°(variance)
+#ºĞ»ê(variance)
 var(ctg$tot_amt)
 var(ctg$dis_amt)
 var(ctg$net_amt)
 
-#?‘œì¤€?¸ì°?(std)
+#Ç¥ÁØÆíÂ÷(std)
 sd(ctg$tot_amt)
 sd(ctg$dis_amt)
 sd(ctg$net_amt)
 
-#ë²”ìœ„ (range)
+#¹üÀ§ (range)
 range(ctg$tot_amt)
 range(ctg$dis_amt)
 range(ctg$net_amt)
 
-#ìµœë?€&ìµœì†Œ (max&min)
+#ÃÖ´ë&ÃÖ¼Ò (max&min)
 max(ctg$tot_amt)
 max(ctg$dis_amt)
 max(ctg$net_amt)
@@ -94,18 +104,18 @@ min(ctg$tot_amt)
 min(ctg$dis_amt)
 min(ctg$net_amt)
 
-#?™œ?„ (skewness)
+#¿Öµµ (skewness)
 skewness(ctg$tot_amt)
 skewness(ctg$dis_amt)
 skewness(ctg$net_amt)
 
-#ì²¨ë„(kurtosis)
+#Ã·µµ(kurtosis)
 kurtosis(ctg$tot_amt)
 kurtosis(ctg$dis_amt)
 kurtosis(ctg$net_amt)
 
 
-###ë¹„ìœ¨?˜• ì²™ë„ ë³€?ˆ˜ì»¬ëŸ¼ ?‹œê°í™”
+###ºñÀ²ÇüÃ´µµ º¯¼öÄÃ·³ ½Ã°¢È­
 
 #simple plot
 par("mar")
@@ -118,7 +128,7 @@ plot(ctg$tot_amt, type ='p',pch=21, bg='blue')
 plot(ctg$dis_amt, type ='p',pch=21, bg='red')
 plot(ctg$net_amt, type ='p',pch=21, bg='magenta')
 
-#?ˆ?Š¤?† ê·¸ë¨ê³? ?™•ë¥? ë°€?„ê³¡ì„ 
+#È÷½ºÅä±×·¥°ú È®·ü ¹Ğµµ °î¼±
 par(mfrow=c(2,2))
 hist(ctg$tot_amt,main='hist(), Frequency ?˜µ?…˜')
 hist(ctg$tot_amt, probability=TRUE, main='hist(), Porbability ?˜µ?…˜')
@@ -126,7 +136,7 @@ plot(density(ctg$tot_amt),main='density() ?™•ë¥ ë?€?„ ?˜µ?…˜')
 hist(ctg$tot_amt,probability=TRUE, main = 'hist() ?ˆ?Š¤?† ê·¸ë¨ê³? density() ?™•ë¥ ë?€?„ ?•¨?ˆ˜ ?†µ?•©')
 lines(density(ctg$tot_amt))
 
-#ë°•ìŠ¤?”Œë¡?
+#¹Ú½ºÇÃ·Ô
 par(mfrow=c(1,1))
 boxplot(ctg$tot_amt,main='ë°•ìŠ¤?”Œë¡?', ylab ='ì§€ì¶œê²½ë¹?')
 
