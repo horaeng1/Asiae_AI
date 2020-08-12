@@ -407,6 +407,76 @@ for (i in kkk$hour) {
 
 obj_hour1 <- array(hour_sales1$hsales)
 obj_hour1
+
+
+# 다항형 명목척도 변수컬럼 시각화
+
+## barplot() 범주형 데이터 그래프
+
+barplot(obj_hour1,
+        main="시간별 판매액",
+        xlab="시간", ylab="판매액")
+
+barplot(obj_hour1,
+        main="시간별 판매액",
+        xlab="시간", ylab="판매액", las=1, horiz=TRUE)
+
+barplot(obj_hour1,
+        main="시간별 판매액",
+        xlab="시간", ylab="판매액", density=c(20,30))
+
+barplot(obj_hour1,
+        main="시간별 판매액",
+        xlab="시간", ylab="판매액", las=1,
+        horiz=TRUE, col=c("light blue", "pink"),
+        beside=TRUE, legend=rownames(object_freq)) # legend는 범례
+
+------------------------------------------------------------------------------
+  
+  kkk <- data.frame(year=allk$year+1900, mon=allk$mon+1, day=allk$mday, hour=allstime,
+                    wday=allk$wday, sale=allsale, dc_rate=alldc_rate)
+
+#3 기간별 할인순매출
+## 할인율<요일>
+
+
+
+wday_sales_dc <- data.frame(wday=0:6, wsales=c(0,0,0,0,0,0,0)) 
+
+
+rate_grade <- data.frame(rate=c('0%','5%','10%'), wratesale=c(1,2,3))
+rate_grade
+str(rate_grade)
+rate_grade[1,]$wratesale  # 할인X
+rate_grade[2,]$wratesale  # 할인 5%
+rate_grade[3,]$wratesale  # 할인 10%
+str(kkk)
+
+result <- table(kkk$wday, kkk$dc_rate)
+rate_grade <- as.data.frame(result)
+colnames(rate_grade) = c('요일', '할인율', '판매건수')
+rate_grade$할인율별판매율 <- c()      
+rate_grade[1,1,]$'판매건수' 
+unique(kkk$dc_rate)
+
+
+result11 <- table(kkk$dc_rate, kkk$wday)
+result1 <- result11[c(1,6,11),]
+rate_grade1 <- as.data.frame(result1)
+
+result1
+
+result1_prop <- prop.table(result1, 2)
+result1_prop
+result1_100 <- round(result1_prop, 5) *100
+result1_100
+
+barplot(result1_100,
+        main= '요일별 할인율에 따른 판매건수 분표 비교',
+        xlab='요일', ylab='판매건수', col = rainbow(3))
+#legend=c('0%', '5%' ,'10%'))
+
+----------------------------------------------------------------------------------
 ##
 kkk$category <- d_data$buyer_nm
 cat_table <- table(kkk$dc_rate, kkk$category)
@@ -520,164 +590,5 @@ barplot(cat_100_4,
         xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
 
 # ----------------------------------------------
-result11 <- table(kkk$dc_rate, kkk$wday)
-result1 <- result11[c(1,6,11),]
-rate_grade1 <- as.data.frame(result1)
 
-result1
-
-result1_prop <- prop.table(result1, 2)
-result1_prop
-result1_100 <- round(result1_prop, 5) *100
-result1_100
-
-barplot(result1_100,
-        main= '요일별 할인율에 따른 판매건수 분표 비교',
-        xlab='요일', ylab='판매건수', col = rainbow(3))
-# ---------------------------------------------------------
-
-
-# 다항형 명목척도 변수컬럼 시각화
-
-## barplot() 범주형 데이터 그래프
-
-barplot(obj_hour1,
-        main="시간별 판매액",
-        xlab="시간", ylab="판매액")
-
-barplot(obj_hour1,
-        main="시간별 판매액",
-        xlab="시간", ylab="판매액", las=1, horiz=TRUE)
-
-barplot(obj_hour1,
-        main="시간별 판매액",
-        xlab="시간", ylab="판매액", density=c(20,30))
-
-barplot(obj_hour1,
-        main="시간별 판매액",
-        xlab="시간", ylab="판매액", las=1,
-        horiz=TRUE, col=c("light blue", "pink"),
-        beside=TRUE, legend=rownames(object_freq)) # legend는 범례
-
-------------------------------------------------------------------------------
-
-  kkk <- data.frame(year=allk$year+1900, mon=allk$mon+1, day=allk$mday, hour=allstime,
-                    wday=allk$wday, sale=allsale, dc_rate=alldc_rate)
-
-#3 기간별 할인순매출
-  ## 할인율<요일>
-  
-
-
-wday_sales_dc <- data.frame(wday=0:6, wsales=c(0,0,0,0,0,0,0)) 
-
-
-rate_grade <- data.frame(rate=c('0%','5%','10%'), wratesale=c(1,2,3))
-rate_grade
-str(rate_grade)
-rate_grade[1,]$wratesale  # 할인X
-rate_grade[2,]$wratesale  # 할인 5%
-rate_grade[3,]$wratesale  # 할인 10%
-str(kkk)
-
-result <- table(kkk$wday, kkk$dc_rate)
-rate_grade <- as.data.frame(result)
-colnames(rate_grade) = c('요일', '할인율', '판매건수')
-rate_grade$할인율별판매율 <- c()      rate_grade[1,1,]$'판매건수' 
-unique(kkk$dc_rate)
-
-
-result11 <- table(kkk$dc_rate, kkk$wday)
-result1 <- result11[c(1,6,11),]
-rate_grade1 <- as.data.frame(result1)
-
-result1
-
-result1_prop <- prop.table(result1, 2)
-result1_prop
-result1_100 <- round(result1_prop, 5) *100
-result1_100
-
-barplot(result1_100,
-        main= '요일별 할인율에 따른 판매건수 분표 비교',
-        xlab='요일', ylab='판매건수', col = rainbow(3))
-        #legend=c('0%', '5%' ,'10%'))
-
-
-str(rate_grade1)
-rate_grade1
-colnames(rate_grade1) = c('할인율','요일', '판매건수')
-obj_wrate_ba <- tapply(rate_grade1$'판매건수', rate_grade1$'요일', sum)
-obj_wrate_ba
-
-par(mfrow=c(1,1))
-barplot(obj_wrate_ba,
-        main="요일별 판매건수",
-        xlab="요일" ylab="판매건수")
-
-sunsale=result1[1,1]+result1[2,1]+result1[3,1]
-rate_grade <- as.data.frame(result)
-colnames(rate_grade) = c('요일', '할인율', '판매건수')
-
-nrow(kkk)
-for (i in nrow(kkk)) {
-  if (kkk$wday[i]==0 & kkk$dc_rate[i] == 0) {
-    rate_grade[1,]$wratesale <- rate_grade[1,]$wratesale+1
-  }
-}
-    if(kkk$dc_rate[i] == 0){rate_grade[1,]$wratesale <- rate_grade[1,]$wratesale+1}                                                    
-  
-  
-  else if(kkk$dc_rate[i] == 5){rate_grade[2,]$wratesale <- rate_grade[2,]$wratesale+1}
-    else if(kkk$dc_rate[i] == 10){rate_grade[3,]$wratesale <- rate_grade[3,]$wratesalee+1}
-  }
-  else if (i==1) {
-    wday_sales_dc$wsales[2] <- wday_sales_dc$wsales[2] + kkk$sale
-  }
-  else if (i==2) {
-    wday_sales_dc$wsales[3] <- wday_sales_dc$wsales[3] + kkk$sale
-  }
-  else if (i==3) {
-    wday_sales_dc$wsales[4] <- wday_sales_dc$wsales[4] + kkk$sale
-  }
-  else if (i==4) {
-    wday_sales_dc$wsales[5] <- wday_sales_dc$wsales[5] + kkk$sale
-  }
-  else if (i==5) {
-    wday_sales_dc$wsales[6] <- wday_sales_dc$wsales[6] + kkk$sale
-  }
-  else{
-    wday_sales_dc$wsales[7] <- wday_sales_dc$wsales[7] + kkk$sale
-  }
-}
-
-summary(kkk)
-str(kkk)
-
-obj_wd_dc <- array(wday_sales_dc$wsales)
-
-## barplot() 범주형 데이터 그래프
-
-par(mfrow=c(2,2)) #멀티 캔버스 프레임 2X2
-
-barplot(obj_wd1,
-        main="요일별 판매액",
-        xlab="요일", ylab="판매액")
-
-barplot(obj_wd1,
-        main="요일별 판매액",
-        xlab="요일", ylab="판매액", las=1, horiz=TRUE)
-
-barplot(obj_wd1,
-        main="요일별 판매액",
-        xlab="요일", ylab="판매액", density=c(20,30))
-
-barplot(obj_wd1,
-        main="요일별 판매액",
-        xlab="요일", ylab="판매액", las=1,
-        horiz=TRUE, col=c("light blue", "pink"),
-        beside=TRUE, legend=rownames(object_freq))
-  
-  
-  
   
