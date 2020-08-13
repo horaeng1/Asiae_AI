@@ -8,8 +8,9 @@ library(psych)
 library(Hmisc)
 library(skimr)
 
-
+str(data)
 # custid 명목척도 분석
+levels(data$custid)
 # custid 기술 통계량
 psych::describe(data$custid)
 Hmisc::describe(data$custid)
@@ -783,6 +784,7 @@ par(mfrow=c(1,1))
 
 
 # part의 value들을 중복제거해서 저장
+
 part_list <- data[-which(duplicated(data$part)),]
 part_list <- part_list$part
 part_list
@@ -797,6 +799,11 @@ data
 # part별로 amount를 더한 값을 만듬
 part_sum <- aggregate(data$amount, by=list(data$part), FUN=sum)
 part_sum
+
+
+# 
+(tapply(data$amount, data$custid, sum))
+
 
 
 
