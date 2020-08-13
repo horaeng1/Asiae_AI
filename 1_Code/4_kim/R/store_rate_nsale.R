@@ -6,6 +6,8 @@ summary(d_data)
 d_data
 c_data <- d_data[1:9999,]
 
+str(k)
+str(c_data)
 k <- as.POSIXlt(c_data$sales_date) 
 dc_rate <- round(c_data$dis_amt/c_data$tot_amt,2)*100
 stime <- c_data$sales_time%/%100
@@ -478,6 +480,9 @@ barplot(result1_100,
 
 ----------------------------------------------------------------------------------
 ##
+  
+# 카테고리별 할인율에 따른 판매건수 분표 비교
+
 kkk$category <- d_data$buyer_nm
 cat_table <- table(kkk$dc_rate, kkk$category)
 cat_table <- cat_table[c(1,6,11),]
@@ -487,9 +492,12 @@ cat_prop
 cat_100 <- round(cat_prop, 5) * 100
 cat_100
 
+
 barplot(cat_100,
         main= '카테고리별 할인율에 따른 판매건수 분표 비교',
         xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
+
+
 ##
 
 kkk$category=='본점'
@@ -512,7 +520,7 @@ str(kkk2)
 str(kkk3)
 str(kkk4)
 
-par(mfrow=c(2,2)) #멀티 캔버스 프레임 리셋
+par(mfrow=c(1,1)) #멀티 캔버스 프레임 리셋
 # 본점
 
 cat_table1 <- table(kkk1$dc_rate, kkk1$category)
@@ -575,20 +583,42 @@ kkk[kkk$category=='화장품',]
 
 barplot(cat_100_1,
         main= '본점의 카테고리별 할인율에 따른 판매건수 분표 비교',
-        xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
+        xlab='카테고리', ylab='판매건수', col = c('blue','green','yellow'), cex.names=1, las=2)
 
 barplot(cat_100_2,
         main= '무역점의 카테고리별 할인율에 따른 판매건수 분표 비교',
-        xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
+        xlab='카테고리', ylab='판매건수', col = c('blue','green','yellow'), cex.names=1, las=2)
 
 barplot(cat_100_3,
         main= '천호점의 카테고리별 할인율에 따른 판매건수 분표 비교',
-        xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
+        xlab='카테고리', ylab='판매건수', col = c('blue','green','yellow'), cex.names=1, las=2)
 
 barplot(cat_100_4,
         main= '신촌점의 카테고리별 할인율에 따른 판매건수 분표 비교',
-        xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
+        xlab='카테고리', ylab='판매건수', col = c('blue','green','yellow'), cex.names=1, las=2)
 
 # ----------------------------------------------
+install.packages('gtools')
 
-  
+library(gtools)
+
+
+cat_100_mix <- smartbind(cat_100_1, cat_100_2)
+cat_100_mix <- smartbind(cat_100_1, cat_100_2, cat_100_3, cat_100_4) 
+cat_100_mix
+
+
+cat_100_mix <- as.table(cat_100_mix)
+cat_100_mix <- row.names(c(1,2,3,4,5,6,7,8,9))
+
+class(cat_100_mix)
+class(cat_100_1)
+barplot(cat_100_mix,
+        main= '본점의 카테고리별 할인율에 따른 판매건수 분표 비교',
+        xlab='카테고리', ylab='판매건수', col = rainbow(3), cex.names=1, las=2)
+
+
+
+
+
+

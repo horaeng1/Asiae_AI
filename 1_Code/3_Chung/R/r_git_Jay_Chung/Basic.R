@@ -12,10 +12,9 @@ library(ggplot2)
 library(doBy)
 Sys.setlocale("LC_ALL","korean")# 한글 OS 아닐시 꼭 써야함
 
-x_data <- read.csv("X_train.csv",header = TRUE, sep = ',',
-                   stringsAsFactors = FALSE,encoding = "CP949"
-)
-y_data <- read.csv("y_train.csv",header = TRUE, sep = ',',stringsAsFactors = FALSE,encoding = "CP949")
+x_data <- read.csv("C:/Users/seokm/OneDrive/Documents/project_data/X_train.csv",header = TRUE, sep = ',', stringsAsFactors = FALSE,encoding = "CP949")
+x_data
+y_data <- read.csv("C:/Users/seokm/OneDrive/Documents/project_data/y_train.csv",header = TRUE, sep = ',',stringsAsFactors = FALSE,encoding = "CP949")
 
 data <- merge(x = y_data, y = x_data, by = 'custid')
 
@@ -26,6 +25,7 @@ ctg_names <- c('custid','gender','sales_date','sales_time','str_nm','goodcd','br
 ctg_names
 (summary(data))
 
+sort()
 ctg<-data[ctg_names]
 ctg
 
@@ -33,6 +33,10 @@ head(ctg)
 str(ctg)
 summary(ctg)
 
+
+
+
+(sort(data$sales_date))
 ##########성별전체내용
 ctg$gender
 
