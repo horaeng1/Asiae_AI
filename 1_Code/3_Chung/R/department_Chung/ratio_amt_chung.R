@@ -21,10 +21,16 @@ unique(data$brd_nm)
 #1882
 unique(data$goodcd)
 #997+9427
+unique(data$part_nm)
+
 unique(data$corner_nm)
 #309
 unique(data$pc_nm)
 #77
+unique(data$part_nm)
+#31
+unique(data$buyer_nm)
+#35
 unique(data$team_nm)
 #4
 
@@ -167,6 +173,6 @@ abline(lm(tot_amt~net_amt, data = ctg),col = 'blue', lwd = 2, lty =2)
 ##최적의 추세곡선(optimum curve)추가
 lines(lowess(ctg$tot_amt ~ ctg$net_amt),
       col=blue, lwd=2 ,lty=2)
-
+sapply()
 
 
