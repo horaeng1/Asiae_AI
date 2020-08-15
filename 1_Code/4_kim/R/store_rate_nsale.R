@@ -1,4 +1,4 @@
-d_data <- read.csv('C:/KK/1st_X_train.csv')
+d_data <- read.csv('C:/Users/ASIAE_22/Downloads/X_train.csv')
 class(d_data)
 str(d_data)
 colnames(d_data)

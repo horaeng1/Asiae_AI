@@ -5,7 +5,7 @@
 
 
 #전체 데이터셋 로딩
-main_data <- read.csv('C:/KK/1st_X_train.csv')
+main_data <- read.csv('C:/Users/ASIAE_22/Downloads/X_train.csv')
 
 
 # 변수컬럼명 파악
