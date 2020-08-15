@@ -174,5 +174,6 @@ abline(lm(tot_amt~net_amt, data = ctg),col = 'blue', lwd = 2, lty =2)
 lines(lowess(ctg$tot_amt ~ ctg$net_amt),
       col=blue, lwd=2 ,lty=2)
 sapply()
-
-
+summary(data$net_amt)
+par(mfrow = c(1,1))
+boxplot(data$net_amt,data$dis_amt)
