@@ -273,7 +273,12 @@ barplot(temp, main =  "월별 할인금액 비율 할인율로 비교",
 legend("topright", legend = c('0%','5%','10%'), fill =c("lightblue", "pink", "yellow") , cex = 0.3)
 
 
-
+str(data)
+#-------------------------------------------------------------
+# barplot 그리기 ---------------------------------------------
+#-------------------------------------------------------------
+#-------------------------------------------------------------
+#-------------------------------------------------------------
 #-------------------------------------------------------------
 #-------------------------------------------------------------
 #-------------------------------------------------------------
@@ -603,5 +608,83 @@ barplot(tmp_o,col=c("salmon","red"), axes=FALSE,space=space_)
 
 
 #-------------------------------------------------------------
+# inst_tot / 무이자 할부 = 1/ 유이자 할부 = 2/ 일시불  = 3
 
+str(data)
+data_tmp <- data
+fee <- data[(data$inst_fee == 1) & (data$inst_mon > 1),]
+notfee <- data[(data$inst_fee ==0) & (data$inst_mon) >1,]
+pay <- data[data$inst_mon <= 1,]
+notfee$inst_tot <- 1
+fee$inst_tot <- 2
+pay$inst_tot <- 3
 
+#notfee <- subset(notfee, select=c("inst_fee", "inst_mon", "inst_tot"))
+tmp <- rbind(notfee, fee)
+tmp <- rbind(tmp, pay)
+#data_tmp <- merge(data_tmp , notfee , by = c("inst_fee", "inst_mon"))
+li <- colnames(data_tmp)
+class(li)
+
+li <- li[-36]
+li
+data_tmp <- merge(data_tmp , tmp , by = li)
+str(data_tmp)
+
+tmp <- as.data.frame(table(data_tmp$inst_mon, data_tmp$inst_fee))
+tmp
+names(tmp) <- c('inst_mon', 'inst_fee', 'inst_tot')
+tmp
+tmp$inst_tot <- c(3, 1, 1, 1, 1, 1 ,1, 1 ,1 ,1 ,1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 )
+tmp
+
+data_tmp <- merge(data_tmp, tmp, by = c('inst_mon', 'inst_fee'))
+View(data_tmp)
+data_inst <- data_tmp
+str(data_tmp)
+
+#-------------------------------------------------------------
+#--------------그래프안에 글자 넣기-------------------------
+#---------------ggplot으로 그래프 그리기----------------------------
+#-------------------------------------------------------------
+# buyer_nm / dc_rate / count
+tmp <- table(data_inst$dc_rate, data_inst$buyer_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+#tmp <- as.data.frame(tmp)
+#names(tmp) <- c('할인율', '카테고리', '건수')
+tmp_prop <- as.data.frame(tmp_prop)
+#tmp_prop$test <- c(1:105)
+#tmp_prop$test[tmp_prop$test==1] <- NA
+names(tmp_prop) <- c('할인율', '카테고리', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=카테고리, y=건수, fill=할인율)) +
+  ggtitle("할인율에 따른 카테고리별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# buyer_nm / dc_rate / net_amt
+tmp <- aggregate(net_amt ~ buyer_nm_f + dc_rate_f, data, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$buyer_nm_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$buyer_nm_f)
+rownames(temp) <- levels(tmp$dc_rate_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할인율', '카테고리', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=카테고리, y=금액, fill=할인율)) +
+  ggtitle("할인율에 따른 카테고리별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
