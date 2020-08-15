@@ -1,4 +1,4 @@
-d_data <- read.csv('C:/Users/ASIAE_22/Downloads/X_train.csv')
+d_data <- read.csv('C:/KK/1st_X_train.csv')
 class(d_data)
 str(d_data)
 colnames(d_data)
@@ -492,6 +492,8 @@ cat_prop
 cat_100 <- round(cat_prop, 5) * 100
 cat_100
 
+
+str(kkk$dc_rate)
 
 barplot(cat_100,
         main= '카테고리별 할인율에 따른 판매건수 분표 비교',
