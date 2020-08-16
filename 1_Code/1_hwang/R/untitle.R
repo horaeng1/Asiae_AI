@@ -641,7 +641,7 @@ tmp
 data_tmp <- merge(data_tmp, tmp, by = c('inst_mon', 'inst_fee'))
 View(data_tmp)
 data_inst <- data_tmp
-str(data_tmp)
+str(data_inst)
 
 #-------------------------------------------------------------
 #--------------그래프안에 글자 넣기-------------------------
@@ -688,3 +688,275 @@ ggplot(as.data.frame(tmp_prop), aes(x=카테고리, y=금액, fill=할인율)) +
   geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+#-------------------------------------------------------------
+# inst_tot 팩터형 추가
+# inst_tot / 무이자 할부 = 1/ 유이자 할부 = 2/ 일시불  = 3
+data_inst$inst_tot_f <- factor(data_inst$inst_tot, levels = c(1:3), labels = c("무이자 할부", "유이자 할부", "일시불"))
+#-------------------------------------------------------------
+# buyer_nm / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$buyer_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '카테고리', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=카테고리, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 카테고리별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# buyer_nm / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ buyer_nm_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$buyer_nm_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$buyer_nm_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '카테고리', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=카테고리, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 카테고리별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# brd_nm / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$brd_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '브랜드', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=브랜드, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 브랜드별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# brd_nm / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ brd_nm_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$brd_nm_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$brd_nm_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '브랜드', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=브랜드, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 브랜드별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# corner_nm / inst_tot / count
+str(data_inst)
+tmp <- table(data_inst$inst_tot_f, data_inst$corner_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '코너', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=코너, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 코너별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=4),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# corner_nm / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ corner_nm_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$corner_nm_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$corner_nm_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '코너', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=코너, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 코너별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=3),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+p1 <- ggplot(tmp_prop, aes(할부요인, 금액))+
+  geom_point(color = "red", shape = 20, size=2)
+p2 <- ggplot(tmp_prop, aes(할부요인, 금액))+
+  geom_jitter(color = "blue", shape = 8, size = 0.8)
+p3 <- ggplot(tmp_prop, aes(할부요인, 금액))+
+  geom_boxplot(fill = "lightblue",
+               outlier.color = "orange", outlier.shape = 17,
+               outlier.size = 2, notch = TRUE)
+p4 <- ggplot(tmp_prop, aes(할부요인, 금액))+
+  geom_violin(fill = "lightpink")
+
+
+
+grid.arrange(p1, p2, p3, p4, nrow=2, ncol=2)
+
+#-------------------------------------------------------------
+# str_nm / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$str_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '지점', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=지점, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 지점별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
+  theme(axis.text.x = element_text(angle=0, hjust = 1, vjust=0, color="black", size=15),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# str_nm / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ str_nm_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$str_nm_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$str_nm_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '지점', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=지점, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 지점별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
+  theme(axis.text.x = element_text(angle=0, hjust = 1, vjust=0, color="black", size=15),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# team_nm / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$team_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '팀', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=팀, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 팀별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
+  theme(axis.text.x = element_text(angle=0,  color="black", size=15),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# team_nm / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ team_nm_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$team_nm_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$team_nm_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '팀', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=팀, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 팀별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
+  theme(axis.text.x = element_text(angle=0,  color="black", size=15),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+
+
+#----------------------------------------------------------------------------------------------------------------------
+# 판매건수 그래프 그리는 함수
+
+
+drawCount <- function(x_v, leg_v, x_la, y_la, leg_la){
+  tmp <- table(leg_v, x_v)
+  tmp_prop <- prop.table(tmp, 2)
+  tmp_prop <- round(tmp_prop, 4) *100
+
+  tmp_prop <- as.data.frame(tmp_prop)
+
+  names(tmp_prop) <- c(leg_la, x_la, y_la)
+  tmp_prop <- as.data.frame(tmp_prop)
+  print(tmp_prop$x_la)
+  tmp_x <- tmp_prop$x_la
+  print(tmp_x)
+  
+  ggplot(tmp_prop, aes(x=x_la, y=y_la, fill=leg_la)) +
+  ggtitle("할부요인에 따른 팀별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=y_la, label = paste(y_la,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
+  theme(axis.text.x = element_text(angle=0,  color="black", size=15),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+  
+}
+
+drawCount(data_inst$str_nm_f, data_inst$inst_tot_f, '지점', '건수', '할부요인' )
+
+tmp <- table(data_inst$inst_tot_f, data_inst$str_nm_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '지점', '건수')
+(tmp_prop$'할부요인')
+
+ggplot(tmp_prop, aes(x=지점, y=tmp_prop$'건수', fill=tmp_prop$'할부요인')) +
+  ggtitle("할부요인에 따른 지점별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
+  theme(axis.text.x = element_text(angle=0, hjust = 1, vjust=0, color="black", size=15),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
