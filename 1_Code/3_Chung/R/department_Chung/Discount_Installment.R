@@ -53,7 +53,7 @@ str(data_main)
 data_main <- data[data$str_nm=='본점',]
 data_main
 
-
+#notfee <- subset(notfee, select=c("inst_fee", "inst_mon", "inst_tot"))
 #buyer_nm_f
 buyer_nm_f<- factor(data_main$buyer_nm, levels =unique(data_main$buyer_nm), labels = c(0:28))
 buyer_nm_f<-factor(data_main$buyer_nm_f, levels =c(0:28), labels = unique(data_main$buyer_nm))  
@@ -110,6 +110,48 @@ ggplot(as.data.frame(tmp_prop),aes(x = 파트, ,y = 건수, group= 할인율))+
   geom_col(aes(fill=할인율))+
   geom_text(aes(label=건수),position = position_stack(vjust=0.5, reverse=FALSE))+
   theme(axis.text.x=element_text(angle= 90, hjust=1, vjust=0, color='black',size=10))
+# inst_tot / 무이자 할부 = 1/ 유이자 할부 = 2/ 일시불  = 3
+str(data)
+data_tmp <- data
+fee <- data[(data$inst_fee == 1) & (data$inst_mon>1),]
+notfee <- data[(data$inst_fee == 0) & (data$inst_mon)>1,]
+pay <- data[data$inst_mon <= 1,]
+notfee$inst_tot <- 1
+fee$inst_tot <-2
+pay$inst_tot<-3
+
+#notfee <- subset(notfee, select=c("inst_fee", "inst_mon", "inst_tot"))
+tmp <- rbind(notfee, fee)
+tmp
+tmp <- rbind(tmp, pay)
+tmp
+#data_tmp <- merge(data_tmp , notfee , by = c("inst_fee", "inst_mon"))
+li <- colnames(data_tmp)
+str(li)
+
+li <- li[-36]
+str(li)
+data_tmp <- merge(data_tmp, tmp, by = li)
+str(data_tmp)
+
+tmp <- as.data.frame(table(data_tmp$inst_mon, data_tmp$inst_fee))
+tmp
+names(tmp)<- c('inst_mon', 'inst_fee', 'inst_tot')
+tmp
+tmp$inst_tot <- c(3, 1, 1, 1, 1, 1 ,1, 1 ,1 ,1 ,1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 )
+tmp
+
+data_tmp <- merge(data_tmp, tmp, by = c('inst_mon', 'inst_fee'))
+view(data_tmp)
+str(data_tmp)
+
+#-------------------------------------------------------------------------
+#----------------그래프안에 글자 넣기 ------------------------------------
+#----------------ggplot으로 그래프 그리기---------------------------------
+#-------------------------------------------------------------------------
+#part_nm / dc_rate /net_amt
+tmp <- aggregate(net_amt ~ part_nm_f + dc_rate_f, data, sum, drop =FALSE)
+
 
 # buyer_nm / dc_rate / count
 tmp <- table(data_main$dc_rate, data_main$buyer_nm)
