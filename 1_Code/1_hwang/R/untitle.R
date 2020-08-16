@@ -915,48 +915,284 @@ ggplot(as.data.frame(tmp_prop), aes(x=팀, y=금액, fill=할부요인)) +
 
 
 
+#-------------------------------------------------------------
+#-------------------------------------------------------------
+tmp <- aggregate(net_amt ~ dc_rate_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
 
-#----------------------------------------------------------------------------------------------------------------------
-# 판매건수 그래프 그리는 함수
 
+#-------------------------------------------------------------
+#          내 할당량  => 월 / 요일 / 일 / 개별판매액
+#-------------------------------------------------------------
 
-drawCount <- function(x_v, leg_v, x_la, y_la, leg_la){
-  tmp <- table(leg_v, x_v)
-  tmp_prop <- prop.table(tmp, 2)
-  tmp_prop <- round(tmp_prop, 4) *100
-
-  tmp_prop <- as.data.frame(tmp_prop)
-
-  names(tmp_prop) <- c(leg_la, x_la, y_la)
-  tmp_prop <- as.data.frame(tmp_prop)
-  print(tmp_prop$x_la)
-  tmp_x <- tmp_prop$x_la
-  print(tmp_x)
-  
-  ggplot(tmp_prop, aes(x=x_la, y=y_la, fill=leg_la)) +
-  ggtitle("할부요인에 따른 팀별 판매건수 비교")+
-  geom_bar(stat="identity")+
-  geom_text(aes(y=y_la, label = paste(y_la,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
-  theme(axis.text.x = element_text(angle=0,  color="black", size=15),
-        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
-  
-}
-
-drawCount(data_inst$str_nm_f, data_inst$inst_tot_f, '지점', '건수', '할부요인' )
-
-tmp <- table(data_inst$inst_tot_f, data_inst$str_nm_f)
+# 요일 데이터 만들기
+tmp <- as.POSIXlt(data_inst$sales_date)
+tmp
+str(tmp)
+data_inst$sales_date_wday <- tmp$wday
+data_inst$sales_date_wday_f <- factor(data_inst$sales_date_wday, levels=c(0:6), labels =c('일', '월', '화', '수', '목' ,'금', '토') )
+str(data_inst)
+# -----------------------------------------------------------------------------
+# sales_date_month / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$sales_date_month_f)
 tmp_prop <- prop.table(tmp, 2)
 tmp_prop <- round(tmp_prop, 4) *100
 
 tmp_prop <- as.data.frame(tmp_prop)
 
-names(tmp_prop) <- c('할부요인', '지점', '건수')
-(tmp_prop$'할부요인')
+names(tmp_prop) <- c('할부요인', '년월', '건수')
+tmp_prop
 
-ggplot(tmp_prop, aes(x=지점, y=tmp_prop$'건수', fill=tmp_prop$'할부요인')) +
-  ggtitle("할부요인에 따른 지점별 판매건수 비교")+
+ggplot(as.data.frame(tmp_prop), aes(x=년월, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 월별 판매건수 비교")+
   geom_bar(stat="identity")+
-  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=6)+
-  theme(axis.text.x = element_text(angle=0, hjust = 1, vjust=0, color="black", size=15),
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# sales_date_month / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ sales_date_month_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$sales_date_month_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$sales_date_month_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '년월', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=년월, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 월별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+# -----------------------------------------------------------------------------
+# sales_date_month / dc_rate / count
+tmp <- table(data_inst$dc_rate_f, data_inst$sales_date_month_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할인율', '년월', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=년월, y=건수, fill=할인율)) +
+  ggtitle("할인율에 따른 월별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# sales_date_month / dc_rate / net_amt
+tmp <- aggregate(net_amt ~ sales_date_month_f + dc_rate_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$sales_date_month_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$sales_date_month_f)
+rownames(temp) <- levels(tmp$dc_rate_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할인율', '년월', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=년월, y=금액, fill=할인율)) +
+  ggtitle("할인율에 따른 월별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 요일별
+# sales_date_wday / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$sales_date_wday_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '요일', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=요일, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 요일별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# sales_date_wday / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ sales_date_wday_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$sales_date_wday_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$sales_date_wday_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '요일', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=요일, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 요일별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+# -----------------------------------------------------------------------------
+# sales_date_wday / dc_rate / count
+tmp <- table(data_inst$dc_rate_f, data_inst$sales_date_wday_f)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할인율', '요일', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=요일, y=건수, fill=할인율)) +
+  ggtitle("할인율에 따른 요일별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# sales_date_wday / dc_rate / net_amt
+tmp <- aggregate(net_amt ~ sales_date_wday_f + dc_rate_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$sales_date_wday_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$sales_date_wday_f)
+rownames(temp) <- levels(tmp$dc_rate_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할인율', '요일', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=요일, y=금액, fill=할인율)) +
+  ggtitle("할인율에 따른 요일별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=5)+
+  theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# sales_date_day 팩터형 추가
+data_inst$sales_date_day_f <- factor(data_inst$sales_date_day, levels=c(1:31), labels = c(1:31))
+# -----------------------------------------------------------------------------
+# 일자별
+# sales_date_day / inst_tot / count
+tmp <- table(data_inst$inst_tot_f, data_inst$sales_date_day)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할부요인', '일', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=일, y=건수, fill=할부요인)) +
+  ggtitle("할부요인에 따른 일자별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# sales_date_day / inst_tot / net_amt
+tmp <- aggregate(net_amt ~ sales_date_day_f + inst_tot_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$sales_date_day_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$sales_date_day_f)
+rownames(temp) <- levels(tmp$inst_tot_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할부요인', '일', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=일, y=금액, fill=할부요인)) +
+  ggtitle("할부요인에 따른 일자별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+# -----------------------------------------------------------------------------
+# sales_date_day / dc_rate / count
+tmp <- table(data_inst$dc_rate_f, data_inst$sales_date_day)
+tmp_prop <- prop.table(tmp, 2)
+tmp_prop <- round(tmp_prop, 4) *100
+
+tmp_prop <- as.data.frame(tmp_prop)
+
+names(tmp_prop) <- c('할인율', '일', '건수')
+tmp_prop
+
+ggplot(as.data.frame(tmp_prop), aes(x=일, y=건수, fill=할인율)) +
+  ggtitle("할인율에 따른 일자별 판매건수 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+#-------------------------------------------------------------
+# sales_date_day / dc_rate / net_amt
+tmp <- aggregate(net_amt ~ sales_date_day_f + dc_rate_f, data_inst, sum, drop=FALSE)
+tmp[is.na(tmp)] <- 0
+tmp
+
+temp <- matrix(as.numeric(tmp$net_amt), ncol=length(unique(tmp$sales_date_day_f)),  byrow=TRUE)
+colnames(temp) <- levels(tmp$sales_date_day_f)
+rownames(temp) <- levels(tmp$dc_rate_f)
+temp <- as.table(temp)
+tmp_prop <- prop.table(temp, 2)
+tmp_prop <- round(tmp_prop, 4)*100
+tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
+names(tmp_prop) <- c('할인율', '일', '금액')
+
+ggplot(as.data.frame(tmp_prop), aes(x=일, y=금액, fill=할인율)) +
+  ggtitle("할인율에 따른 일자별 판매금액 비교")+
+  geom_bar(stat="identity")+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
+        plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+#-------------------------------------------------------------
+# 개별 판매액 ??
+
 
