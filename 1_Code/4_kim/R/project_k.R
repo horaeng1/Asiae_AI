@@ -1,4 +1,4 @@
-data <- read.csv('C:/Users/ASIAE_22/Downloads/X_train.csv')
+data <- read.csv('C:/Users/ASIAE_20/Desktop/근영/실습DB/X_train.csv')
 class(data)
 str(data)
 colnames(data)
@@ -9,15 +9,6 @@ library(dplyr)
 library(MASS)
 library(ggplot2)
 library(corrplot)
-
-main_data <- read.csv("C:/Users/ASIAE_22/Downloads/X_train.csv",
-                      header = TRUE, sep = ',',
-                      stringsAsFactors = FALSE,
-                      strip.white = TRUE,
-                      na.strings = c(',', '?', "NA")
-)
-
-data_main <- 
 
 ctg_names <- c('str_nm', 'corner_nm', 'part_nm', 'buyer_nm', 'team_nm')
 ctg <- main_data[ctg_names]
