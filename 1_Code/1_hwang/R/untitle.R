@@ -30,7 +30,6 @@ dc_rate
 summary(data$dc_rate)
 
 
-str(data_main)
 
 data_main <- data[data$str_nm_f=='본점',]
 #--------------------------------------------------
