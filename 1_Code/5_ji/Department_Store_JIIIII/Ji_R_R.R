@@ -277,7 +277,7 @@ temp <- as.table(temp)
 tmp_prop <- prop.table(temp, 2)
 tmp_prop <- round(tmp_prop, 4)*100
 tmp_prop <- as.data.frame(tmp_prop)
-tmp_prop <- tmp_prop[-c(10:15),]
+#tmp_prop <- tmp_prop[-c(10:15),]
 tmp_prop
 names(tmp_prop) <- c('할인율','팀', '금액')
 
@@ -308,6 +308,7 @@ temp
 
 names(temp) <- c('할인율','팀', '금액')
 
+# 그래프
 ggplot(as.data.frame(temp), aes(x=팀, y=금액, fill=할인율)) +
   ggtitle("할인율에 따른 팀별 판매금액 비교")+
   geom_bar(stat="identity")+
@@ -429,6 +430,7 @@ tmp_prop <- as.data.frame(tmp_prop)
 names(tmp_prop) <- c('할인율', '지점', '건수')
 tmp_prop
 
+#prop 그래프
 ggplot(as.data.frame(tmp_prop), aes(x=지점, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 지점별 판매건수 비교")+
   geom_bar(stat="identity")+
@@ -446,6 +448,7 @@ tmp <- as.data.frame(tmp)
 names(tmp) <- c('할인율', '지점', '건수')
 tmp
 
+# 그래프
 ggplot(as.data.frame(tmp), aes(x=지점, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 지점별 판매건수 비교")+
   geom_bar(stat="identity")+
@@ -464,7 +467,7 @@ data_pos$import_flg_f <- factor(data_pos$import_flg,
                                 labels = c('국산','수입'))
 
 # import_flg / dc_rate / tot_amt  백분율
-tmp <- aggregate(tot_amt ~ import_flg_f + dc_rate_f, data, sum, drop=FALSE)
+tmp <- aggregate(tot_amt ~ import_flg_f + dc_rate_f, data_pos, sum, drop=FALSE)
 tmp[is.na(tmp)] <- 0
 tmp
 
@@ -501,7 +504,7 @@ temp <- as.data.frame(temp)
 temp
 names(temp) <- c('할인율', '수입여부', '금액')
 
-#prop 그래프
+# 그래프
 ggplot(as.data.frame(temp), aes(x=수입여부, y=금액, fill=할인율)) +
   ggtitle("할인율에 따른 국산/수입 판매금액 비교")+
   geom_bar(stat="identity")+
@@ -540,7 +543,7 @@ tmp <- as.data.frame(tmp)
 names(tmp) <- c('할인율', '수입여부', '건수')
 tmp
 
-#prop 그래프
+# 그래프
 ggplot(as.data.frame(tmp), aes(x=수입여부, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 수입여부 판매건수 비교")+
   geom_bar(stat="identity")+
@@ -808,6 +811,7 @@ temp <- as.data.frame(temp)
 temp
 names(temp) <- c('할부요인', '수입여부', '금액')
 
+# 그래프
 ggplot(as.data.frame(temp), aes(x=수입여부, y=금액, fill=할부요인)) +
   ggtitle("할부요인에 따른 국산/수입 판매금액 비교")+
   geom_bar(stat="identity")+
