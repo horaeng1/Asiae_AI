@@ -1344,6 +1344,16 @@ ggplot(as.data.frame(tmp), aes(x=년월, y=건수, fill=할인율)) +
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=5)+
   theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+tmp_prop <- tmp_prop[tmp_prop$할인율=='0%' ,]
+tmp_prop <- tmp_prop[,-1]
+tmp_prop
+tmp_prop <- aggregate(건수 ~ 년월 , data=tmp_prop, sum, drop=FALSE)
+
+plot(건수 ~ 년월, data=tmp_prop)
+lines(lowess(tmp_prop$건수 ~ tmp_prop$년월), col="black")
+par(new=TRUE)
+par(mfrow=c(1,1))
 #-------------------------------------------------------------
 # sales_date_month / dc_rate / tot_amt
 tmp <- aggregate(tot_amt ~ sales_date_month_f + dc_rate_f, data_pos, sum, drop=FALSE)
@@ -1530,13 +1540,6 @@ tmp_prop <- tmp_prop[,-1]
 tmp_prop
 tmp_prop <- aggregate(건수 ~ 일 , data=tmp_prop, sum, drop=FALSE)
 
-p1 <- ggplot(data=tmp_prop, aes(x=일, y=건수))+
-  geom_point()
-p1 <- p1 + geom_smooth()
-p1
-
-library(plotly)
-ggplotly(p1)
 
 plot(건수 ~ 일, data=tmp_prop)
 #abline(lm(건수 ~ 일, data=tmp_prop))
@@ -1615,6 +1618,16 @@ ggplot(as.data.frame(tmp), aes(x=일, y=건수, fill=할인율)) +
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+tmp_prop <- tmp_prop[tmp_prop$할인율=='10%' ,]
+tmp_prop <- tmp_prop[,-1]
+tmp_prop
+tmp_prop <- aggregate(건수 ~ 일 , data=tmp_prop, sum, drop=FALSE)
+
+plot(건수 ~ 일, data=tmp_prop)
+lines(lowess(tmp_prop$건수 ~ tmp_prop$일), col="blue")
+par(new=TRUE)
+
 #-------------------------------------------------------------
 # sales_date_day / dc_rate / tot_amt
 tmp <- aggregate(tot_amt ~ sales_date_day_f + dc_rate_f, data_pos, sum, drop=FALSE)
@@ -1710,7 +1723,7 @@ tmp_prop
 ggplot(as.data.frame(tmp_prop), aes(x=가격대, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 가격대별 판매건수 비교")+
   geom_bar(stat="identity")+
-  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=7)+
   theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
 
@@ -1720,7 +1733,7 @@ names(tmp) <- c('할인율', '가격대', '건수')
 ggplot(as.data.frame(tmp), aes(x=가격대, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 일자별 판매건수 비교")+
   geom_bar(stat="identity")+
-  geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=7)+
   theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
 #-------------------------------------------------------------
@@ -1744,7 +1757,7 @@ names(tmp_prop) <- c('할인율', '가격대', '금액')
 ggplot(as.data.frame(tmp_prop), aes(x=가격대, y=금액, fill=할인율)) +
   ggtitle("할인율에 따른 가격대별 판매금액 비교")+
   geom_bar(stat="identity")+
-  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=7)+
   theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
 tmp <- as.data.frame(tmp)
@@ -1754,7 +1767,7 @@ names(tmp) <- c('가격대', '할인율', '금액')
 ggplot(as.data.frame(tmp), aes(x=가격대, y=금액, fill=할인율)) +
   ggtitle("할인율에 따른 일자별 판매금액 비교")+
   geom_bar(stat="identity")+
-  geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=3)+
+  geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=5)+
   theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
 
