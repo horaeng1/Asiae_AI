@@ -1,3 +1,65 @@
+#기본
+library(doBy)
+library(dplyr)
+library(psych)
+library(Hmisc)
+library(skimr)
+library(fBasics)
+library(ggplot2)
+
+Sys.setlocale("LC_ALL","korean")#os가 한글이 아닐시에 꼭 써야함
+
+
+x_data <- read.csv("C:/Users/seokm/OneDrive/Documents/project_data/X_train.csv",header = TRUE, sep = ',', stringsAsFactors = FALSE,encoding = "CP949")
+y_data <- read.csv("C:/Users/seokm/OneDrive/Documents/project_data/y_train.csv",header = TRUE, sep = ',',stringsAsFactors = FALSE,encoding = "CP949")
+data <- merge(x = y_data, y = x_data, by = 'custid')
+
+
+#---------dc_rate--------------------------------
+#--------------------------------
+dc_rate <- round((data$dis_amt/ data$tot_amt)*100, 0)
+dc_rate
+unique(dc_rate)
+
+from <- list(0, c(1:5), c(6:65))
+to <- list(0, 5, 10)
+library(doBy)
+dc_rate <- recodeVar(dc_rate , from , to)
+dc_rate_f <- factor(dc_rate, levels = c(0,5,10), labels = c('0%','5%','10%'))
+
+data$dc_rate <- dc_rate
+data$dc_rate_f <- dc_rate_f
+dc_rate 
+
+summary(data$dc_rate)
+
+#-------------------------------------------------------------
+# inst_tot / 무이자 할부 = 1/ 유이자 할부 = 2/ 일시불  = 3
+
+str(data)
+data_tmp <- data
+
+tmp <- as.data.frame(table(data_tmp$inst_mon, data_tmp$inst_fee))
+tmp
+names(tmp) <- c('inst_mon', 'inst_fee', 'inst_tot')
+tmp
+#할부요인
+
+tmp$inst_tot <- c(3, 1, 1, 1, 1, 1 ,1, 1 ,1 ,1 ,1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 )
+tmp
+
+data_tmp <- merge(data_tmp, tmp, by = c('inst_mon', 'inst_fee'))
+data_inst <- data_tmp
+
+data_inst
+str(data_inst)
+data_pos <- data_inst[data_inst$net_amt>=0,]
+
+str(data_pos)
+
+data_pos$inst_tot_f <- as.factor(data_pos$inst_tot)
+
+data_pos$inst_tot_f <- factor(data_pos$inst_tot_f, levels= c(1:3), labels = c('무이자할부', '유이자할부','일시불'))
 #------------------------------------------------buyer_nm_f------------------------------------------------
 #------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------
@@ -14,7 +76,7 @@ library(doBy)
 tmp <- table(data_pos$dc_rate_f, data_pos$buyer_nm_f)
 tmp_prop <- prop.table(tmp, 2)
 tmp_prop <- round(tmp_prop, 4) *100
-
+tmp_prop
 tmp_prop <- as.data.frame(tmp_prop)
 names(tmp_prop) <- c('할인율', '카테고리별', '건수')
 tmp_prop

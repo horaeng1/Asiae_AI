@@ -136,7 +136,7 @@ plot(건수 ~ 파트, data=tmp_prop_p, col='black')
 lines(lowess(tmp_prop_p$건수 ~ tmp_prop_p$파트),col = 'black')
 par(new=TRUE)
 
-
+if
 
 
 
@@ -240,9 +240,9 @@ ggplot(as.data.frame(temp), aes(x=파트, y=금액, fill=할인율)) +
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
 
 
-
-
-
+summary(data_pos$tot_amt)
+temp <- data_pos$tot_amt %>% scale(center = TRUE)
+temp
 #--------------------------------------------part_nm /inst_tot / count/proposition---------------------------------------------------------
 # inst_tot 팩터형 추가
 # inst_tot / 무이자 할부 = 1/ 유이자 할부 = 2/ 일시불  = 3
@@ -256,7 +256,7 @@ tmp_prop <-as.data.frame(tmp_prop)
 names(tmp_prop) <- c('할부요인','파트', '건수')
 tmp_prop
 tmp_prop <- tmp_prop[-c(31,32,33,79,80,81),]
-tmp_prop
+tmp_propsmi
 unique(tmp_prop)
 str(tmp_prop)
 ggplot(as.data.frame(tmp_prop), aes(x=파트, y=건수, fill=할부요인)) +
