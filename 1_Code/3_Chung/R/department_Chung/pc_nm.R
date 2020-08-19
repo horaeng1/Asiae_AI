@@ -25,7 +25,7 @@ tmp_prop
 table(data_pos$pc_nm_f) ############################ 3건 아르모니아 사이버쇼핑 용기
 
 ggplot(as.data.frame(tmp_prop), aes(x=층별, y=건수, fill=할인율)) +
-  ggtitle("할인율에 따른 층별 판매건수 비교")+
+  ggtitle("할인율에 따른 층별 판매건수 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수,'%')),position = position_stack(vjust = 0.5), color = "black", size=2)+
   theme(axis.text.x = element_text(angle=90, vjust=0, color="black", size=10),
@@ -46,7 +46,7 @@ tmp
 table(data_pos$pc_nm_f) ############################ 3건 아르모니아 사이버쇼핑 용기
 
 ggplot(as.data.frame(tmp), aes(x=층별, y=건수, fill=할인율)) +
-  ggtitle("할인율에 따른 층별 판매건수 비교(real)")+
+  ggtitle("할인율에 따른 층별 판매건수 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=2)+
   theme(axis.text.x = element_text(angle=90, vjust=0, color="black", size=10),
@@ -74,7 +74,7 @@ tmp_prop <- tmp_prop[-c(223:225,229:234),]
 tmp_prop
 
 ggplot(as.data.frame(tmp_prop), aes(x=층별, y=금액, fill=할인율)) +
-  ggtitle("할인율에 따른 층별 판매금액 비교")+
+  ggtitle("할인율에 따른 층별 판매금액 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -100,7 +100,7 @@ temp <- temp[-c(223:225,229:234),]
 temp
 
 ggplot(as.data.frame(temp), aes(x=층별, y=금액, fill=할인율)) +
-  ggtitle("할인율에 따른 층별 판매금액 비교(real)")+
+  ggtitle("할인율에 따른 층별 판매금액 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -121,7 +121,7 @@ tmp_prop <- tmp_prop[-c(223:225,229:234),]
 tmp_prop
 
 ggplot(as.data.frame(tmp_prop), aes(x=층별, y=건수, fill=할부요인)) +
-  ggtitle("할부요인에 따른 층별 판매건수 비교")+
+  ggtitle("할부요인에 따른 층별 판매건수 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=2)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -143,7 +143,7 @@ tmp <- tmp[-c(223:225,229:234),]
 tmp
 
 ggplot(as.data.frame(tmp), aes(x=층별, y=건수, fill=할부요인)) +
-  ggtitle("할부요인에 따른 층별 판매건수 비교(real)")+
+  ggtitle("할부요인에 따른 층별 판매건수 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=2)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -170,7 +170,7 @@ tmp_prop
 names(tmp_prop) <- c('할부요인', '층별', '금액')
 tmp_prop
 ggplot(as.data.frame(tmp_prop), aes(x=층별, y=금액, fill=할부요인)) +
-  ggtitle("할부요인에 따른 층별 판매금액 비교")+
+  ggtitle("할부요인에 따른 층별 판매금액 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=2)+
   theme(axis.text.x = element_text(angle=90, hjust = 0.5, vjust=0.5, color="black", size=10),
@@ -195,7 +195,7 @@ temp
 names(temp) <- c('할부요인', '층별', '금액')
 temp
 ggplot(as.data.frame(temp), aes(x=층별, y=금액, fill=할부요인)) +
-  ggtitle("할부요인에 따른 층별 판매금액 비교(real)")+
+  ggtitle("할부요인에 따른 층별 판매금액 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=2)+
   theme(axis.text.x = element_text(angle=90, hjust = 0.5, vjust=0.5, color="black", size=10),

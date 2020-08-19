@@ -23,7 +23,7 @@ tmp_prop
 table(data_pos$buyer_nm_f) ###############################행사장, 조리식품, 청과곡물,점외 
 
 ggplot(as.data.frame(tmp_prop), aes(x=카테고리별, y=건수, fill=할인율)) +
-  ggtitle("할인율에 따른 카테고리별 판매건수 비교")+
+  ggtitle("할인율에 따른 카테고리별 판매건수 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, vjust=0, color="black", size=10),
@@ -45,7 +45,7 @@ tmp
 table(data_pos$buyer_nm_f) ###############################행사장, 조리식품, 청과곡물,점외 
 
 ggplot(as.data.frame(tmp), aes(x=카테고리별, y=건수, fill=할인율)) +
-  ggtitle("할인율에 따른 카테고리별 판매건수 비교(real)")+
+  ggtitle("할인율에 따른 카테고리별 판매건수 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, vjust=0, color="black", size=10),
@@ -70,7 +70,7 @@ tmp_prop
 names(tmp_prop) <-c('할인율','카테고리별','금액')
 
 ggplot(as.data.frame(tmp_prop), aes(x=카테고리별, y=금액, fill=할인율)) +
-  ggtitle("할인율에 따른 카테고리별 판매금액 비교")+
+  ggtitle("할인율에 따른 카테고리별 판매금액 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -95,7 +95,7 @@ temp<-temp[-c(79:105),]
 temp
 names(temp) <-c('할인율','카테고리별','금액')
 
-ggplot(as.data.frame(tmp_prop), aes(x=카테고리별, y=금액, fill=할인율)) +
+ggplot(as.data.frame(temp), aes(x=카테고리별, y=금액, fill=할인율)) +
   ggtitle("할인율에 따른 카테고리별 판매금액 비교(real)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=3)+
@@ -118,7 +118,7 @@ tmp_prop<-tmp_prop[-c(79:105),]
 tmp_prop
 
 ggplot(as.data.frame(tmp_prop), aes(x=카테고리별, y=건수, fill=할부요인)) +
-  ggtitle("할부요인에 따른 카테고리별 판매건수 비교")+
+  ggtitle("할부요인에 따른 카테고리별 판매건수 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -140,7 +140,7 @@ tmp<-tmp[-c(79:105),]
 tmp
 
 ggplot(as.data.frame(tmp), aes(x=카테고리별, y=건수, fill=할부요인)) +
-  ggtitle("할부요인에 따른 카테고리별 판매건수 비교(real)")+
+  ggtitle("할부요인에 따른 카테고리별 판매건수 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=10),
@@ -168,7 +168,7 @@ tmp_prop
 
 
 ggplot(as.data.frame(tmp_prop), aes(x=카테고리별, y=금액, fill=할부요인)) +
-  ggtitle("할부요인에 따른 카테고리별 판매금액 비교")+
+  ggtitle("할부요인에 따른 카테고리별 판매금액 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 0.5, vjust=0.5, color="black", size=10),
@@ -196,7 +196,7 @@ temp
 
 
 ggplot(as.data.frame(temp), aes(x=카테고리별, y=금액, fill=할부요인)) +
-  ggtitle("할부요인에 따른 카테고리별 판매금액 비교(real)")+
+  ggtitle("할부요인에 따른 카테고리별 판매금액 비교(real, NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 0.5, vjust=0.5, color="black", size=10),
