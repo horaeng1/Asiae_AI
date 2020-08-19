@@ -84,6 +84,7 @@ tmp_prop <- prop.table(tmp, 2)
 tmp_prop <- round(tmp_prop, 4) *100
 
 tmp_prop <- as.data.frame(tmp_prop)
+tmp_prop
 names(tmp_prop) <- c('할인율', '파트', '건수')
 tmp_prop
 
@@ -92,12 +93,50 @@ tmp_prop
 tmp_prop <- tmp_prop[-c(88:93),]
 tmp_prop
 
+
+
 ggplot(as.data.frame(tmp_prop), aes(x=파트, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 파트별 판매건수 비교(NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+tmp_prop_p <-tmp_prop
+tmp_prop_p
+
+
+tmp_prop_p <- tmp_prop_p[tmp_prop_p$할인율=='0%' ,]
+tmp_prop_p <- tmp_prop_p[,-1]
+tmp_prop_p
+tmp_prop_p <- aggregate(건수 ~ 파트 , data=tmp_prop_p, sum, drop=FALSE)
+plot(건수 ~ 파트, data=tmp_prop_p, col='red')
+lines(lowess(tmp_prop_p$건수 ~ tmp_prop_p$파트),col='red')
+par(new=TRUE)
+tmp_prop_p <-tmp_prop
+
+
+tmp_prop_p <- tmp_prop_p[tmp_prop_p$할인율=='5%' ,]
+tmp_prop_p<- tmp_prop_p[,-1]
+tmp_prop_p
+tmp_prop_p <- aggregate(건수 ~ 파트 , data=tmp_prop_p, sum, drop=FALSE)
+plot(건수 ~ 파트, data=tmp_prop_p, col='blue')
+lines(lowess(tmp_prop_p$건수 ~ tmp_prop_p$파트), col = 'blue')
+par(new=TRUE)
+tmp_prop_p <-tmp_prop
+
+
+tmp_prop_p<- tmp_prop_p[tmp_prop$할인율=='10%' ,]
+tmp_prop_p <- tmp_prop_p[,-1]
+tmp_prop_p
+tmp_prop_p <- aggregate(건수 ~ 파트 , data=tmp_prop_p, sum, drop=FALSE)
+
+plot(건수 ~ 파트, data=tmp_prop_p, col='black')
+lines(lowess(tmp_prop_p$건수 ~ tmp_prop_p$파트),col = 'black')
+par(new=TRUE)
+
+
 
 
 
@@ -113,6 +152,7 @@ tmp
 names(tmp) <- c('할인율', '파트', '건수')
 tmp
 
+
 table(data_pos$part_nm_f) ##########################
 tmp
 #--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -120,7 +160,12 @@ str(tmp)
 tmp <- tmp[-c(88:93),]
 tmp
 Hmisc::describe(tmp$건수)
-ggplot(as.data.frame(tmp), aes(x=파트, y=건수, fill=할인율)) +
+
+tmp_order <- tmp[order(tmp$건수),]
+tmp_order
+
+
+ggplot(as.data.frame(tmp_order), aes(x=파트, y=건수, fill=할인율)) +
   ggtitle("할인율에 따른 파트별 판매건수 비교(real,NO SCALE)")+
   geom_bar(stat="identity")+
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=3)+
