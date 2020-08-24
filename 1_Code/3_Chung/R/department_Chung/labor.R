@@ -10,8 +10,8 @@ library(ggplot2)
 Sys.setlocale("LC_ALL","korean")#os가 한글이 아닐시에 꼭 써야함
 
 
-x_data <- read.csv("C:/Users/seokm/OneDrive/Documents/project_data/X_train.csv",header = TRUE, sep = ',', stringsAsFactors = FALSE,encoding = "CP949")
-y_data <- read.csv("C:/Users/seokm/OneDrive/Documents/project_data/y_train.csv",header = TRUE, sep = ',',stringsAsFactors = FALSE,encoding = "CP949")
+x_data <- read.csv("C:/Users/ASIAE_06/Documents/R/R_basic/X_train.csv",header = TRUE, sep = ',', stringsAsFactors = FALSE,encoding = "CP949")
+y_data <- read.csv("C:/Users/ASIAE_06/Documents/R/R_basic/y_train.csv",header = TRUE, sep = ',',stringsAsFactors = FALSE,encoding = "CP949")
 data <- merge(x = y_data, y = x_data, by = 'custid')
 
 
@@ -69,6 +69,7 @@ length(unique(data_pos$part_nm))
 data_pos$part_nm_f <- factor(data_pos$part_nm, levels= unique(data_pos$part_nm),labels = c(0:30))
 data_pos$part_nm_f <- factor(data_pos$part_nm_f, levels= c(0:30),labels = unique(data_pos$part_nm))
 table(data_pos$part_nm)
+
 
 #str(part_nm_f)
 
@@ -178,6 +179,7 @@ dc_rate <- recodeVar(dc_rate , from , to)
 dc_rate_f <- factor(dc_rate, levels = c(0,5,10), labels = c('0%','5%','10%'))
 
 tmp <- aggregate(tot_amt ~ part_nm_f + dc_rate_f, data_pos, sum, drop = FALSE)
+
 tmp
 
 tmp[is.na(tmp)]<-0
