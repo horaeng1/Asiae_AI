@@ -813,7 +813,6 @@ names(tmp_prop) <- c('할부요인', '코너', '금액')
 ggplot(as.data.frame(tmp_prop), aes(x=코너, y=금액, fill=할부요인)) +
   ggtitle("할부요인에 따른 코너별 판매금액 비교")+
   geom_bar(stat="identity")+
-  geom_text(aes(y=금액, label = paste(금액,"%")),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0, color="black", size=3),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
 
@@ -1550,6 +1549,8 @@ tmp <- as.data.frame(tmp)
 tmp
 names(tmp) <- c('할부요인', '일', '건수')
 
+
+
 ggplot(as.data.frame(tmp), aes(x=일, y=건수, fill=할부요인)) +
   ggtitle("할부요인에 따른 일자별 판매건수 비교")+
   geom_bar(stat="identity")+
@@ -1736,6 +1737,16 @@ ggplot(as.data.frame(tmp), aes(x=가격대, y=건수, fill=할인율)) +
   geom_text(aes(y=건수, label = paste(건수)),position = position_stack(vjust = 0.5), color = "black", size=7)+
   theme(axis.text.x = element_text(angle=0,  vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+tmp_prop <- tmp_prop[tmp_prop$할인율=='0%' ,]
+tmp_prop <- tmp_prop[,-1]
+tmp_prop
+tmp_prop <- aggregate(건수 ~ 가격대 , data=tmp_prop, sum, drop=FALSE)
+
+plot(건수 ~ 가격대, data=tmp_prop)
+lines(lowess(tmp_prop$건수 ~ tmp_prop$가격대), col="black")
+par(new=TRUE)
+
 #-------------------------------------------------------------
 # sales_date_day / dc_rate / tot_amt
 tmp <- aggregate(tot_amt ~ tot_amt_f + dc_rate_f, data_pos, sum, drop=FALSE)
@@ -1832,3 +1843,23 @@ ggplot(as.data.frame(tmp), aes(x=가격대, y=금액, fill=할부요인)) +
   geom_text(aes(y=금액, label = paste(금액)),position = position_stack(vjust = 0.5), color = "black", size=3)+
   theme(axis.text.x = element_text(angle=0, vjust=0, color="black", size=12),
         plot.title = element_text(family="serif", face = "bold", hjust= 0.5, size=20))
+
+
+
+
+summary(data_pos$tot_amt[data_pos$import_flg==0])
+
+str(data_inst)
+
+tmp <- aggregate(tot_amt ~ tot_amt_f + inst_tot_f, data_pos, sum, drop=FALSE)
+aggregate(tot_amt_win ~ team_nm,data_inst,sum,  drop=FALSE)
+data_inst$tot_amt_win <- winsorize(data_inst$tot_amt, prob = 0.99)
+summary(data_inst$tot_amt_win)
+summary(data_inst$tot_amt)
+tmp <- aggregate(tot_amt ~ custid, data_inst, sum, drop=FALSE)
+tmp
+summary(tmp$tot_amt)
+tmp[tmp$tot_amt>3402056,]
+unique(tmp$custid)
+
+data_inst[data_inst$corner_nm=='인터넷 백화점',]
