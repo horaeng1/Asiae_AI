@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- html5 기반 문서임 -->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>아경 데이터팀</title>
+        <style>
+            /*주석구간 CSS
+            CSS 셀렉터
+            # : id
+            . : class
+              : tag
+            */
+                #block{
+                    background-color:red;
+                }
+                .nav{
+                    background-color: yellow;
+                }
+                div{
+                    border:1px solid grey;
+                    margin:10px;
+                }
+            /* >:자식 blank:자손 요소 */
+            .nav li{
+                float:left;
+                list-style:none;
+                margin:10px;
+            }
+            .nav a{
+                text-decoration:none;
+            }
+            .clb{
+                clear:both;
+            }
+            </style>    
+
+    </head>
+    <body>
+        
+        <!-- 주석구간 HTML-->
+        <div id="wrap">
+            <div id="header">
+                <h1>
+                <img width = "50px" src = "photo.jpg"/> 
+                NLP 전문가 과정
+                </h1>
+                <nav>                        
+                    <ul class = "nav">
+                        <li>
+                        <!-- a 태그에서/는  root 폴더 -->
+                            <a herf ="index.html">home</a>
+                        </li>
+                        <li>
+                            <a herf ="profile.html">프로필</a>
+                        </li>
+                        <li>
+                            <a herf ="portfolio.html">포트폴리오</a>
+                        </li>
+                        <li>
+                            <a herf ="board.html">방명록</a>
+                        </li>
+                    </ul>
+                </nav>
+                    <div class = "clb">
+                </div>
+                <div id="content">
+                    <h2> 경제기반 빅데이터 NLP 전문가</h2>
+                    <ul>
+                        <li><a href = ""> 포트폴리오 페이지</a></li>
+                        <li><a href = ""> SQL 데이터베이스 프로젝트 </a></li>
+                        <li><a href = ""> R을 활용한 직업군 분석</a></li>
+                        <li><a href = ""> SNS 기반 의사표현 프로젝트</a></li>
+                        <li><a href = ""> NLP 기반 주가 추정 프로젝트</a></li>
+                        <li><a href = ""> SNS 기반 산업 동향 추정 프로젝트</a></li>
+                        <li><a href = ""> 부동신 평가 분석 프로젝트</a></li>
+
+                    </ul>
+                </div>
+                <div id="footer">
+                <img width = "50px" src ="logo.png"/> 
+                    <span> @by Homg Gil Dong</span>
+
+                </div>
+        </div>
+    </body>
+        
+
+</html>
